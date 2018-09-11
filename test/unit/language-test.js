@@ -1,4 +1,5 @@
-import { getLabel, getCode } from 'utils/language';
+import { getLabel, getCode, availableTranslations, translationAvailable } from 'utils/language';
+import jsonTranslations from '../../src/assets/translations'
 
 describe('languageUtils', function() {
 
@@ -174,5 +175,13 @@ describe('languageUtils', function() {
             });
         });
     });
+
+    describe('Supported translations are up to date', () => {
+        it('should match all translation json files to the list of available translations', () => {
+            expect(jsonTranslations).to.have.all.keys(availableTranslations);
+        });
+    });
+
+
 });
 
