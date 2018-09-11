@@ -36,8 +36,8 @@ export function getCode(language) {
     return langToCode[language] || '';
 }
 
-export const availableTranslations = ['la'];
+export const translatedLanguageCodes = ['la'];
 
-export function translationAvailable(language) {
-    return availableTranslations.indexOf(language.substring(0,2).toLowerCase()) >= 0;
+export function isTranslationAvailable(language) {
+    return translatedLanguageCodes.indexOf(language.substring(0,2).toLowerCase()) >= 0;
 }
