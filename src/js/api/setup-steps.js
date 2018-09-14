@@ -6,6 +6,7 @@ import ScriptLoader from 'utils/scriptloader';
 import { bundleContainsProviders } from 'api/core-loader';
 import { composePlayerError,
     SETUP_ERROR_LOADING_PLAYLIST, SETUP_ERROR_LOADING_PROVIDER } from 'api/errors';
+import { loadJsonTranslation, isTranslationAvailable } from 'utils/language';
 
 export function loadPlaylist(_model) {
     const playlist = _model.get('playlist');
@@ -95,6 +96,25 @@ function loadSkin(_model) {
     return resolved;
 }
 
+function loadTranslations(_model) {
+    const language = '';//getLanguage();
+    if (language && isTranslationAvailable(language)) {
+        return new Promise(resolve => {
+            loadJsonTranslation(_model.attributes.base, language, result => {
+                //TODO: update localization with translations (JW8-1346)
+                if (destroyed(_model)) {
+                    reject();
+                }
+                resolve();
+            }, error => {
+                //TODO: trigger warning
+                resolve();
+            });
+        });
+    }
+    return resolved;
+}
+
 function destroyed(_model) {
     return _model.attributes._destroyed;
 }
@@ -105,7 +125,8 @@ const startSetup = function(model, api, promises) {
     }
     return Promise.all(promises.concat([
         loadProvider(model),
-        loadSkin(model)
+        loadSkin(model),
+        loadTranslations(model)
     ]));
 };
 
